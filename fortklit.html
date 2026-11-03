@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForkliftPro - Sewa Forklift Cikande, Jabodetabek & Bandung</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fffbe1',
+                            100: '#fff3b8',
+                            400: '#fbbf24',
+                            500: '#f59e0b', // Safety Amber
+                            600: '#d97706',
+                            700: '#b45309',
+                        },
+                        industrial: {
+                            800: '#1e293b',
+                            900: '#0f172a', // Dark Slate
+                            950: '#020617',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Alpine.js CDN for Reactive Interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen" x-data="forkliftApp()">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-industrial-900 text-white shadow-xl border-b border-brand-500/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 bg-brand-500 rounded-xl flex items-center justify-center text-industrial-900 font-extrabold text-2xl shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-wider text-white">FORKLIFT<span class="text-brand-500">PRO</span></span>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase -mt-1">Cikande • Jabodetabek • Bandung</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex items-center space-x-7 text-sm font-semibold">
+                    <a href="#beranda" class="hover:text-brand-500 transition-colors py-2 border-b-2 border-transparent hover:border-brand-500">Beranda</a>
+                    <a href="#wilayah" class="hover:text-brand-500 transition-colors py-2 border-b-2 border-transparent hover:border-brand-500">Wilayah Layanan</a>
+                    <a href="#armada" class="hover:text-brand-500 transition-colors py-2 border-b-2 border-transparent hover:border-brand-500">Katalog Forklift</a>
+                    <a href="#kalkulator" class="hover:text-brand-500 transition-colors py-2 border-b-2 border-transparent hover:border-brand-500">Kalkulator Sewa</a>
+                    <a href="#kontak" class="hover:text-brand-500 transition-colors py-2 border-b-2 border-transparent hover:border-brand-500">Kontak</a>
+                </nav>
+
+                <!-- Action Call / Phone Button -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <a href="https://wa.me/625691464879/821286953724?text=Halo%20ForkliftPro,%20saya%20ingin%20tanya%20sewa%20forklift" target="_blank" class="bg-brand-500 hover:bg-brand-600 text-industrial-900 font-extrabold px-5 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 transition-all flex items-center gap-2 transform active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span>085691464879/621286953724
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-300 hover:text-white focus:outline-none p-2">
+                        <i class="fa-solid" :class="mobileMenuOpen ? 'fa-xmark text-2xl' : 'fa-bars text-2xl'"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden bg-industrial-800 border-t border-gray-700 px-4 pt-3 pb-6 space-y-3">
+            <a @click="mobileMenuOpen = false" href="#beranda" class="block text-gray-200 hover:text-brand-500 font-medium py-2">Beranda</a>
+            <a @click="mobileMenuOpen = false" href="#wilayah" class="block text-gray-200 hover:text-brand-500 font-medium py-2">Wilayah Layanan</a>
+            <a @click="mobileMenuOpen = false" href="#armada" class="block text-gray-200 hover:text-brand-500 font-medium py-2">Katalog Forklift</a>
+            <a @click="mobileMenuOpen = false" href="#kalkulator" class="block text-gray-200 hover:text-brand-500 font-medium py-2">Kalkulator Sewa</a>
+            <a @click="mobileMenuOpen = false" href="#kontak" class="block text-gray-200 hover:text-brand-500 font-medium py-2">Kontak</a>
+            <a href="https://wa.me/6285691464879/621286953724?text=Halo%20ForkliftPro,%20saya%20ingin%20sewa%20forklift" target="_blank" class="w-full bg-brand-500 text-industrial-900 font-bold py-3 rounded-xl mt-2 flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Hubungi WA 085691464879/621286953724</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+
+        <!-- Hero Section -->
+        <section id="beranda" class="relative bg-industrial-900 text-white overflow-hidden py-16 md:py-24">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Column: Headline & Info -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/30 text-brand-400 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>Layanan Utama: Cikande, Tangerang, Jakarta, Bogor, Depok, Bekasi & Bandung</span>
+                        </div>
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
+                            Sewa Forklift <span class="text-brand-500">Terpercaya & Cepat</span> Siap Kirim Ke Lokasi
+                        </h1>
+                        <p class="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0">
+                            Penyediaan armada Forklift solar, dan Reach Truck (1.5 Ton – 15+ Ton) lengkap dengan Operator SIO resmi. Pengiriman cepat ke kawasan industri dan proyek Anda.
+                        </p>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                            <a href="https://wa.me/6285691464879/621286953724?text=Halo%20ForkliftPro,%20saya%20butuh%20sewa%20forklift%20sekarang" target="_blank" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-industrial-900 font-extrabold px-8 py-4 rounded-xl shadow-xl shadow-brand-500/20 hover:shadow-brand-500/40 transition-all flex items-center justify-center gap-3">
+                                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                                <span>Sewa Sekarang via WA</span>
+                            </a>
+                            <a href="#kalkulator" class="w-full sm:w-auto bg-industrial-800 hover:bg-industrial-800/80 text-white font-bold px-7 py-4 rounded-xl border border-gray-700 transition-all text-center">
+                                Hitung Biaya Sewa
+                            </a>
+                        </div>
+
+                        <!-- Highlights -->
+                        <div class="grid grid-cols-3 gap-4 pt-6 border-t border-gray-800 max-w-lg mx-auto lg:mx-0 text-left">
+                            <div>
+                                <h4 class="text-2xl font-extrabold text-brand-500">100+</h4>
+                                <p class="text-xs text-gray-400 font-medium">Unit Armada Ready</p>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-extrabold text-brand-500">24/7</h4>
+                                <p class="text-xs text-gray-400 font-medium">Respon WA & Mekanik</p>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-extrabold text-brand-500">SIO K3</h4>
+                                <p class="text-xs text-gray-400 font-medium">Operator Resmi</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Quick Search Box -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-white text-gray-900 rounded-2xl p-6 sm:p-8 shadow-2xl border border-gray-100 relative">
+                            <div class="absolute -top-3 left-6 bg-brand-500 text-industrial-900 font-black text-xs uppercase px-3 py-1 rounded-md shadow">
+                                Quick Booking WA
+                            </div>
+                            <h3 class="text-xl font-bold mb-4 text-industrial-900 flex items-center gap-2">
+                                <i class="fa-solid fa-magnifying-glass text-brand-600"></i>
+                                Cari & Pesan Forklift
+                            </h3>
+
+                            <form @submit.prevent="scrollToArmadaWithFilter()" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Wilayah Layanan Pengiriman</label>
+                                    <select x-model="searchLocation" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                        <option value="Cikande & Serang">Cikande & Serang (Modern Cikande, dll)</option>
+                                        <option value="Kab. Tangerang">Kab. Tangerang (Balaraja, Cikupa, dll)</option>
+                                        <option value="Kota Tangerang">Kota Tangerang (Karawaci, BSD, Batuceper)</option>
+                                        <option value="Jakarta Selatan">Jakarta Selatan (TB Simatupang, Kuningan)</option>
+                                        <option value="Jakarta Barat">Jakarta Barat (Puri, Kebon Jeruk, Daan Mogot)</option>
+                                        <option value="Bekasi">Bekasi (Cikarang, Tambun, MM2100)</option>
+                                        <option value="Depok">Depok (Margonda, Sawangan, Cimanggis)</option>
+                                        <option value="Bogor">Bogor (Sentul, Cibinong, Gunung Putri)</option>
+                                        <option value="Bandung">Bandung (Cimahi, Gedebage, Batujajar)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kapasitas Beban (Load)</label>
+                                    <select x-model="searchCapacity" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                        <option value="All">Semua Kapasitas</option>
+                                        <option value="1.5 - 2.5 Ton">1.5 - 2.5 Ton</option>
+                                        <option value="3 Ton">3 Ton</option>
+                                        <option value="5 Ton">5 Ton</option>
+                                        <option value="10 Ton">10 Ton</option>
+                                        <option value="15+ Ton">15+ Ton</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tipe Mesin</label>
+                                    <select x-model="searchType" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                        <option value="All">Semua Tipe Mesin</option>
+                                        <option value="Solar">Solar</option>
+                                        <option value="Solar">Solar </option>
+                                        <option value="Solar">/option>Solar</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="w-full bg-industrial-900 hover:bg-industrial-800 text-brand-400 font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 group">
+                                    <span>Tampilkan Katalog Unit</span>
+                                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Area Coverage Section (PENTING) -->
+        <section id="wilayah" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <span class="text-xs font-extrabold text-brand-600 uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full border border-brand-200">Cakupan Wilayah Layanan</span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-industrial-900 mt-3">Area Pengiriman Fast Response</h2>
+                    <p class="text-gray-600 mt-2 text-sm sm:text-base">Siap kirim unit forklift dengan armada towing cepat ke berbagai kawasan industri & pabrik utama berikut.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Location 1: Cikande & Serang -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 hover:border-brand-500 hover:shadow-lg transition-all group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-brand-500 text-industrial-900 font-black rounded-xl flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid fa-industry"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg text-industrial-900">Cikande & Serang</h3>
+                                <p class="text-xs text-brand-600 font-bold">Kawasan Prioritas Utamakan Cepat</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1.5 mb-5">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Modern Cikande Industrial Estate</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Nikomas Gemilang / Kibin</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Kragilan, Jawilan, Balaraja Barat</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Kota Serang & Cilegon Industrial</li>
+                        </ul>
+                        <button @click="directWaArea('Cikande & Serang')" class="w-full bg-industrial-900 hover:bg-brand-500 hover:text-industrial-900 text-white font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp"></i> Sewa Forklift Cikande
+                        </button>
+                    </div>
+
+                    <!-- Location 2: Tangerang Kab & Kota -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 hover:border-brand-500 hover:shadow-lg transition-all group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-industrial-900 text-brand-400 font-black rounded-xl flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid fa-warehouse"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg text-industrial-900">Kab. & Kota Tangerang</h3>
+                                <p class="text-xs text-brand-600 font-bold">Respon Cepat Towing</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1.5 mb-5">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Balaraja, Cikupa, Pasar Kemis</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Karawaci, BSD City, Serpong</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Batuceper, Cikokol, Jatiuwung</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Bandara Soekarno Hatta (Cargo)</li>
+                        </ul>
+                        <button @click="directWaArea('Kab & Kota Tangerang')" class="w-full bg-industrial-900 hover:bg-brand-500 hover:text-industrial-900 text-white font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp"></i> Sewa Forklift Tangerang
+                        </button>
+                    </div>
+
+                    <!-- Location 3: Jakarta Selatan & Barat -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 hover:border-brand-500 hover:shadow-lg transition-all group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-brand-500 text-industrial-900 font-black rounded-xl flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid fa-city"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg text-industrial-900">Jakarta Selatan & Barat</h3>
+                                <p class="text-xs text-brand-600 font-bold">Proyek & Perpusat Gudang</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1.5 mb-5">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> TB Simatupang, Kuningan, Pancoran</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Kebon Jeruk, Puri Indah, Daan Mogot</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Cengkareng, Kalideres, Kembangan</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Cilandak, Jagakarsa, Pondok Indah</li>
+                        </ul>
+                        <button @click="directWaArea('Jakarta Selatan & Barat')" class="w-full bg-industrial-900 hover:bg-brand-500 hover:text-industrial-900 text-white font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp"></i> Sewa Forklift Jakarta
+                        </button>
+                    </div>
+
+                    <!-- Location 4: Bekasi & Depok -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 hover:border-brand-500 hover:shadow-lg transition-all group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-industrial-900 text-brand-400 font-black rounded-xl flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid fa-truck-moving"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg text-industrial-900">Bekasi & Depok</h3>
+                                <p class="text-xs text-brand-600 font-bold">Kawasan Megapolitan</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1.5 mb-5">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Cikarang (MM2100, EJIP, Jababeka)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Tambun, Cibitung, Bekasi Barat/Timur</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Margonda, Sawangan, Cimanggis Depok</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Cinere, Tapos, Depok II</li>
+                        </ul>
+                        <button @click="directWaArea('Bekasi & Depok')" class="w-full bg-industrial-900 hover:bg-brand-500 hover:text-industrial-900 text-white font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp"></i> Sewa Forklift Bekasi/Depok
+                        </button>
+                    </div>
+
+                    <!-- Location 5: Bogor -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 hover:border-brand-500 hover:shadow-lg transition-all group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-brand-500 text-industrial-900 font-black rounded-xl flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid fa-mountain-city"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg text-industrial-900">Bogor & Sekitarnya</h3>
+                                <p class="text-xs text-brand-600 font-bold">Area Industri & Pabrik</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1.5 mb-5">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Kawasan Industri Sentul</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Cibinong, Gunung Putri, Citeureup</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Cileungsi, Kedunghalang, Parung</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Kota Bogor & Proyek Sekitar</li>
+                        </ul>
+                        <button @click="directWaArea('Bogor')" class="w-full bg-industrial-900 hover:bg-brand-500 hover:text-industrial-900 text-white font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp"></i> Sewa Forklift Bogor
+                        </button>
+                    </div>
+
+                    <!-- Location 6: Bandung -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 hover:border-brand-500 hover:shadow-lg transition-all group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-industrial-900 text-brand-400 font-black rounded-xl flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid fa-building-flag"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg text-industrial-900">Bandung Raya</h3>
+                                <p class="text-xs text-brand-600 font-bold">Kawasan Tekstil & Proyek</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1.5 mb-5">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Cimahi, Batujajar, Padalarang</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Gedebage, Dayeuhkolot, Banjaran</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Rancaekek, Soekarno-Hatta Bandung</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Lembang, Kopo, Pasir Koja</li>
+                        </ul>
+                        <button @click="directWaArea('Bandung')" class="w-full bg-industrial-900 hover:bg-brand-500 hover:text-industrial-900 text-white font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp"></i> Sewa Forklift Bandung
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Armada Forklift Catalog & Filter Section -->
+        <section id="armada" class="py-20 bg-gray-100 border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-extrabold text-brand-600 uppercase tracking-widest mb-2">Pilihan Unit Lengkap</h2>
+                    <p class="text-3xl sm:text-4xl font-black text-industrial-900">Katalog Armada Forklift Modern</p>
+                    <p class="text-gray-600 mt-2 text-sm sm:text-base">Dukungan unit prima, terawat rutin, serta siap untuk kerja berat shift harian maupun bulanan.</p>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-200 mb-10">
+                    <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                        
+                        <!-- Filter Tipe Mesin -->
+                        <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                            <span class="text-xs font-bold uppercase text-gray-400 w-full mb-1">Tipe Mesin:</span>
+                            <template x-for="type in typeOptions" :key="type">
+                                <button 
+                                    @click="selectedType = type"
+                                    :class="selectedType === type ? 'bg-industrial-900 text-brand-400 font-bold' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium'"
+                                    class="px-4 py-2 rounded-xl text-xs transition-all">
+                                    <span x-text="type"></span>
+                                </button>
+                            </template>
+                        </div>
+
+                        <!-- Filter Kapasitas -->
+                        <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                            <span class="text-xs font-bold uppercase text-gray-400 w-full mb-1">Kapasitas Load:</span>
+                            <template x-for="cap in capacityOptions" :key="cap">
+                                <button 
+                                    @click="selectedCapacity = cap"
+                                    :class="selectedCapacity === cap ? 'bg-brand-500 text-industrial-900 font-extrabold' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium'"
+                                    class="px-3.5 py-2 rounded-xl text-xs transition-all">
+                                    <span x-text="cap"></span>
+                                </button>
+                            </template>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Grid Kartu Forklift -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <template x-for="item in filteredForklifts" :key="item.id">
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl border border-gray-200 transition-all flex flex-col group">
+                            
+                            <!-- Card Image Header -->
+                            <div class="relative bg-gradient-to-b from-gray-900 to-industrial-900 p-6 flex items-center justify-center h-52 overflow-hidden">
+                                <div class="absolute top-3 left-3 bg-brand-500 text-industrial-900 font-extrabold text-xs px-3 py-1 rounded-full shadow">
+                                    <span x-text="item.capacity"></span>
+                                </div>
+                                <div class="absolute top-3 right-3 bg-industrial-800/80 backdrop-blur-sm text-gray-200 text-xs px-2.5 py-1 rounded-md border border-gray-700">
+                                    <i class="fa-solid fa-gas-pump text-brand-400 mr-1"></i>
+                                    <span x-text="item.engine"></span>
+                                </div>
+
+                                <!-- SVG Forklift Visual -->
+                                <svg class="w-40 h-40 text-brand-500 transform group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 17h10M2 17a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h4l3 3h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2M2 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0m10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0"></path>
+                                    <path d="M14 17h3l3-7V5h-2M18 5v12M22 17v-8h-4"></path>
+                                    <rect x="19" y="3" width="3" height="4" rx="1" fill="#f59e0b"></rect>
+                                </svg>
+                            </div>
+
+                            <!-- Card Body Content -->
+                            <div class="p-6 flex-grow flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-xl font-bold text-industrial-900" x-text="item.name"></h3>
+                                    <p class="text-xs text-gray-500 font-medium mt-1" x-text="item.brand"></p>
+
+                                    <!-- Specs Badges -->
+                                    <div class="grid grid-cols-2 gap-2 my-4 bg-gray-50 p-3 rounded-xl border border-gray-100 text-xs">
+                                        <div>
+                                            <span class="text-gray-400 block font-medium">Tinggi Mast:</span>
+                                            <span class="font-bold text-gray-800" x-text="item.mastHeight"></span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-400 block font-medium">Transmisi:</span>
+                                            <span class="font-bold text-gray-800" x-text="item.transmission"></span>
+                                        </div>
+                                        <div class="col-span-2">
+                                            <span class="text-gray-400 block font-medium">Keunggulan Utama:</span>
+                                            <span class="font-semibold text-emerald-600" x-text="item.safety"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pricing & Action -->
+                                <div class="pt-4 border-t border-gray-100">
+                                    <div class="flex items-baseline justify-between mb-4">
+                                        <div>
+                                            <span class="text-xl sm:text-2xl font-black text-industrial-900" x-text="formatRupiah(item.priceDay)"></span>
+                                            <span class="text-xs text-gray-500">/ Shift Hari</span>
+                                        </div>
+                                        <span class="text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">
+                                            Sewa Bulanan Nego
+                                        </span>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button @click="quickCalc(item)" class="w-full bg-gray-100 hover:bg-gray-200 text-industrial-900 text-xs font-bold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1">
+                                            <i class="fa-solid fa-calculator text-brand-600"></i>
+                                            <span>Hitung Sewa</span>
+                                        </button>
+                                        <button @click="openModalWithUnit(item)" class="w-full bg-brand-500 hover:bg-brand-600 text-industrial-900 text-xs font-extrabold py-2.5 rounded-xl transition-colors shadow-md flex items-center justify-center gap-1">
+                                            <i class="fa-brands fa-whatsapp"></i>
+                                            <span>Sewa Sekarang</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Empty State -->
+                <div x-show="filteredForklifts.length === 0" class="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-200">
+                    <i class="fa-solid fa-triangle-exclamation text-4xl text-brand-500 mb-3"></i>
+                    <h3 class="text-lg font-bold text-industrial-900">Unit Tidak Ditemukan</h3>
+                    <p class="text-sm text-gray-500 mt-1">Ganti pilihan filter kapasitas atau tipe mesin Anda.</p>
+                    <button @click="resetFilters()" class="mt-4 bg-industrial-900 text-white font-bold px-4 py-2 rounded-xl text-xs">Reset Filter</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Interactive Rental Price Calculator -->
+        <section id="kalkulator" class="py-20 bg-industrial-900 text-white relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="max-w-3xl mx-auto text-center mb-12">
+                    <span class="bg-brand-500/20 text-brand-400 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Simulasi Biaya Cepat</span>
+                    <h2 class="text-3xl sm:text-4xl font-black mt-3">Kalkulator Estimasi Sewa Forklift</h2>
+                    <p class="text-gray-400 text-sm sm:text-base mt-2">Pilih unit, durasi sewa, dan lokasi pengiriman untuk mendapatkan estimasi biaya langsung.</p>
+                </div>
+
+                <div class="bg-industrial-800 rounded-3xl p-6 sm:p-10 border border-gray-700 shadow-2xl max-w-4xl mx-auto">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        
+                        <!-- Form Inputs -->
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-300 uppercase mb-2">1. Pilih Unit Forklift</label>
+                                <select x-model="calc.selectedId" class="w-full bg-industrial-900 border border-gray-600 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:border-brand-500 focus:outline-none">
+                                    <template x-for="unit in forklifts" :key="unit.id">
+                                        <option :value="unit.id" x-text="`${unit.name} (${unit.capacity})`"></option>
+                                    </template>
+                                </select>
+                            </div>
+  
+                            <div>
+                                <label class="block text-xs font-bold text-gray-300 uppercase mb-2">2. Durasi & Skema Sewa</label>
+                                <div class="grid grid-cols-2 gap-3 mb-3">
+                                    <button @click="calc.type = 'Harian'" :class="calc.type === 'Harian' ? 'bg-brand-500 text-industrial-900 font-extrabold' : 'bg-industrial-900 text-gray-400 border border-gray-700'" class="py-2.5 rounded-xl text-xs transition-all">Harian / Shift</button>
+                                    <button @click="calc.type = 'Bulanan'" :class="calc.type === 'Bulanan' ? 'bg-brand-500 text-industrial-900 font-extrabold' : 'bg-industrial-900 text-gray-400 border border-gray-700'" class="py-2.5 rounded-xl text-xs transition-all">Bulanan</button>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <input type="number" min="1" x-model.number="calc.duration" class="w-full bg-industrial-900 border border-gray-600 rounded-xl px-4 py-2.5 text-sm font-bold text-white focus:border-brand-500 focus:outline-none">
+                                    <span class="text-sm font-bold text-gray-400" x-text="calc.type === 'Harian' ? 'Hari' : 'Bulan'"></span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-300 uppercase mb-2">3. Lokasi Wilayah Pengiriman</label>
+                                <select x-model="calc.location" class="w-full bg-industrial-900 border border-gray-600 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:border-brand-500 focus:outline-none">
+                                    <option value="Cikande & Serang">Cikande & Serang (Modern Cikande, Kibin)</option>
+                                    <option value="Kab. Tangerang">Kab. Tangerang (Balaraja, Cikupa)</option>
+                                    <option value="Kota Tangerang">Kota Tangerang (BSD, Karawaci)</option>
+                                    <option value="Jakarta Selatan">Jakarta Selatan (TB Simatupang, Kuningan)</option>
+                                    <option value="Jakarta Barat">Jakarta Barat (Puri Indah, Daan Mogot)</option>
+                                    <option value="Bekasi">Bekasi (Cikarang, Tambun, MM2100)</option>
+                                    <option value="Depok">Depok (Margonda, Cimanggis)</option>
+                                    <option value="Bogor">Bogor (Sentul, Cibinong)</option>
+                                    <option value="Bandung">Bandung (Cimahi, Gedebage)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-300 uppercase mb-2">4. Sertakan Operator SIO</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="flex items-center gap-2 bg-industrial-900 p-3 rounded-xl border border-gray-700 cursor-pointer text-xs">
+                                        <input type="radio" name="operatorOption" value="with" x-model="calc.operator" class="text-brand-500">
+                                        <span class="font-bold text-white">Ya (Termasuk Operator SIO)</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 bg-industrial-900 p-3 rounded-xl border border-gray-700 cursor-pointer text-xs">
+                                        <input type="radio" name="operatorOption" value="without" x-model="calc.operator" class="text-brand-500">
+                                        <span class="font-bold text-white">Lepas Kunci (Tanpa Operator)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Summary Calculation -->
+                        <div class="bg-industrial-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-sm font-bold uppercase text-brand-400 tracking-wider pb-3 border-b border-gray-800 flex items-center justify-between">
+                                    <span>Ringkasan Biaya Sewa</span>
+                                    <i class="fa-solid fa-calculator"></i>
+                                </h4>
+
+                                <div class="space-y-3 my-6 text-xs text-gray-300">
+                                    <div class="flex justify-between">
+                                        <span>Sewa Base (<span x-text="calc.duration"></span> <span x-text="calc.type"></span>)</span>
+                                        <span class="font-bold text-white" x-text="formatRupiah(calculateBasePrice())"></span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Layanan Operator SIO</span>
+                                        <span class="font-bold text-white" x-text="formatRupiah(calculateOperatorPrice())"></span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Estimasi Mobilisasi Towing</span>
+                                        <span class="font-bold text-white" x-text="formatRupiah(calculateMobilizationCost())"></span>
+                                    </div>
+                                    <div class="pt-3 border-t border-gray-800 flex justify-between font-bold text-sm text-white">
+                                        <span>Total Estimasi:</span>
+                                        <span class="text-brand-400" x-text="formatRupiah(calculateTotalCost())"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-500/10 border border-brand-500/30 p-4 rounded-xl text-center space-y-3">
+                                <p class="text-xs text-gray-400">Estimasi Total Biaya Pengiriman Ke <span x-text="calc.location" class="font-bold text-white"></span>:</p>
+                                <p class="text-3xl font-black text-brand-500" x-text="formatRupiah(calculateTotalCost())"></p>
+                                
+                                <button @click="sendCalcToWa()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                                    <span>Kirim Estimasi via WhatsApp (085691464879)(081286953724)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keunggulan Layanan -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-extrabold text-brand-600 uppercase tracking-widest mb-2">Keunggulan Layanan</h2>
+                    <p class="text-3xl sm:text-4xl font-black text-industrial-900">Mengapa Memilih ForkliftPro?</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:border-brand-500/50 hover:shadow-lg transition-all text-center group">
+                        <div class="w-14 h-14 bg-brand-500/10 text-brand-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:bg-brand-500 group-hover:text-industrial-900 transition-colors">
+                            <i class="fa-solid fa-wrench"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-industrial-900 mb-2">Unit Prima & Terawat</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">Inspeksi berkala sebelum dikirim. Unit dalam kondisi 100% siap kerja berat tanpa kendala.</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:border-brand-500/50 hover:shadow-lg transition-all text-center group">
+                        <div class="w-14 h-14 bg-brand-500/10 text-brand-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:bg-brand-500 group-hover:text-industrial-900 transition-colors">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-industrial-900 mb-2">Operator SIO K3 Resmi</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">Operator bersertifikat SIO aktif, berpengalaman, dan mengutamakan standar keselamatan K3 pabrik.</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:border-brand-500/50 hover:shadow-lg transition-all text-center group">
+                        <div class="w-14 h-14 bg-brand-500/10 text-brand-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:bg-brand-500 group-hover:text-industrial-900 transition-colors">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-industrial-900 mb-2">Respon Cepat 24/7</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">Admin & Tim Support siap melayani order darurat via WhatsApp 085691464879 kapan saja.</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:border-brand-500/50 hover:shadow-lg transition-all text-center group">
+                        <div class="w-14 h-14 bg-brand-500/10 text-brand-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:bg-brand-500 group-hover:text-industrial-900 transition-colors">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-industrial-900 mb-2">Pengiriman Cepat</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">Armada towing terdistribusi dekat Cikande & Jabodetabek untuk durasi kirim instan.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Pemesanan Cepat & Kontak -->
+        <section id="kontak" class="py-20 bg-gray-50 border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Column Info -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div>
+                            <span class="text-xs font-extrabold text-brand-600 uppercase tracking-widest">Pemesanan Langsung</span>
+                            <h2 class="text-3xl font-black text-industrial-900 mt-1">Formulir Order Sewa Forklift</h2>
+                            <p class="text-xs sm:text-sm text-gray-600 mt-2">Isi form singkat ini untuk langsung terhubung dengan layanan pelanggan WA 085691464879.</p>
+                        </div>
+
+                        <div class="space-y-4 pt-2">
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
+                                <div class="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">WhatsApp Direct</p>
+                                    <p class="text-base font-extrabold text-industrial-900">085691464879</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
+                                <div class="w-12 h-12 bg-industrial-900 text-brand-400 rounded-xl flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">Telepon Hotline</p>
+                                    <p class="text-base font-extrabold text-industrial-900">085691464879</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
+                                <div class="w-12 h-12 bg-brand-500 text-industrial-900 rounded-xl flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">Pool Terdekat</p>
+                                    <p class="text-xs font-bold text-industrial-900">Cikande Industrial Estate & Jabodetabek Hub</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column Form -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-200">
+                            <h3 class="text-xl font-extrabold text-industrial-900 mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-file-signature text-brand-500"></i>
+                                Form Sewa Instan via WhatsApp
+                            </h3>
+
+                            <form @submit.prevent="submitDirectForm()" class="space-y-4 text-xs">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Nama Pemesan / CP *</label>
+                                        <input type="text" required x-model="form.name" placeholder="Nama Anda" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Nama Perusahaan / PT</label>
+                                        <input type="text" x-model="form.company" placeholder="PT / CV (opsional)" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Pilih Wilayah Pengiriman *</label>
+                                        <select x-model="form.location" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                            <option value="Cikande & Serang">Cikande & Serang</option>
+                                            <option value="Kab. Tangerang">Kab. Tangerang</option>
+                                            <option value="Kota Tangerang">Kota Tangerang</option>
+                                            <option value="Jakarta Selatan">Jakarta Selatan</option>
+                                            <option value="Jakarta Barat">Jakarta Barat</option>
+                                            <option value="Bekasi">Bekasi</option>
+                                            <option value="Depok">Depok</option>
+                                            <option value="Bogor">Bogor</option>
+                                            <option value="Bandung">Bandung</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Kapasitas Forklift *</label>
+                                        <select x-model="form.capacity" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                            <option value="1.5 - 2.5 Ton">1.5 Ton - 2.5 Ton</option>
+                                            <option value="3 Ton">3 Ton</option>
+                                            <option value="5 Ton">5 Ton</option>
+                                            <option value="10 Ton">10 Ton</option>
+                                            <option value="15+ Ton">15+ Ton</option>
+                                            <option value="Reach Truck / Stacker">Reach Truck / Stacker</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Durasi Sewa *</label>
+                                        <input type="text" required x-model="form.duration" placeholder="Contoh: 3 Hari / 1 Bulan" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Tanggal Rencana Pakai *</label>
+                                        <input type="date" required x-model="form.startDate" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold text-gray-700 mb-1">Alamat Lengkap / Catatan Proyek</label>
+                                    <textarea x-model="form.address" rows="2" placeholder="Nama Jalan, Kawasan Industri, jenis material..." class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 text-sm">
+                                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                                    <span>Kirim Booking Ke WA 085691464879</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Booking Modal -->
+    <div x-show="bookingModal" x-transition class="fixed inset-0 z-50 overflow-y-auto bg-industrial-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div @click.away="bookingModal = false" class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-gray-100">
+            
+            <div class="bg-industrial-900 text-white p-6 relative">
+                <button @click="bookingModal = false" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <span class="text-xs font-bold text-brand-400 uppercase tracking-wider">Konfirmasi Sewa Unit</span>
+                <h3 class="text-xl font-black mt-1" x-text="selectedUnitModal.name || 'Unit Forklift'"></h3>
+            </div>
+
+            <form @submit.prevent="submitModalWa()" class="p-6 space-y-4 text-xs">
+                <div class="bg-brand-50 border border-brand-200 p-3.5 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-500 font-medium">Kapasitas Load:</p>
+                        <p class="font-extrabold text-industrial-900 text-sm" x-text="selectedUnitModal.capacity"></p>
+                    </div>
+                    <span class="bg-brand-500 text-industrial-900 font-extrabold text-xs px-3 py-1 rounded-full" x-text="selectedUnitModal.engine"></span>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Nama Pemesan *</label>
+                    <input type="text" required x-model="modalForm.name" placeholder="Nama Anda" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 py-2.5 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Wilayah Layanan Pengiriman *</label>
+                    <select x-model="modalForm.location" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 py-2.5 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        <option value="Cikande & Serang">Cikande & Serang</option>
+                        <option value="Kab. Tangerang">Kab. Tangerang</option>
+                        <option value="Kota Tangerang">Kota Tangerang</option>
+                        <option value="Jakarta Selatan">Jakarta Selatan</option>
+                        <option value="Jakarta Barat">Jakarta Barat</option>
+                        <option value="Bekasi">Bekasi</option>
+                        <option value="Depok">Depok</option>
+                        <option value="Bogor">Bogor</option>
+                        <option value="Bandung">Bandung</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Durasi Sewa *</label>
+                        <input type="text" required x-model="modalForm.duration" placeholder="Contoh: 2 Hari" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 py-2.5 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Tgl Rencana Pakai *</label>
+                        <input type="date" required x-model="modalForm.startDate" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 py-2.5 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 text-sm mt-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Kirim Pesan Ke WA 085691464879</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6285691464879?text=Halo%20ForkliftPro,%20saya%20ingin%20konsultasi%20sewa%20forklift%20untuk%20wilayah%20layanan%20saya" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform group">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+        <span class="absolute right-16 bg-industrial-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+            Hubungi WA 085691464879
+        </span>
+    </a>
+
+    <!-- Footer -->
+    <footer class="bg-industrial-950 text-gray-400 py-12 border-t border-gray-800 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 text-white font-black text-xl">
+                        <i class="fa-solid fa-truck-ramp-box text-brand-500"></i>
+                        <span>FORKLIFT<span class="text-brand-500">PRO</span></span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Spesialis rental forklift terpercaya untuk kawasan Cikande, Tangerang, Jakarta, Bogor, Depok, Bekasi, dan Bandung. Respon cepat 24 jam via WhatsApp 085691464879.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3">Wilayah Layanan</h4>
+                    <ul class="space-y-1.5 text-gray-400">
+                        <li>• Cikande & Serang</li>
+                        <li>• Kab. & Kota Tangerang</li>
+                        <li>• Jakarta Selatan & Barat</li>
+                        <li>• Bekasi & Depok</li>
+                        <li>• Bogor & Bandung Raya</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3">Katalog Unit</h4>
+                    <ul class="space-y-1.5 text-gray-400">
+                        <li>• Forklift Diesel (3T - 15+ Ton)</li>
+                        <li>• Forklift Elektrik / Battery (1.5T - 3 Ton)</li>
+                        <li>• Reach Truck & Stacker Warehouse</li>
+                        <li>• Operator SIO K3 Terverifikasi</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3">Kontak Cepat</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-white font-bold"><i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i> 085691464879</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-brand-500"></i> 085691464879</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot text-brand-500 mt-0.5"></i> <span>Kawasan Industri Cikande & Pool Jabodetabek</span></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-gray-800 text-center text-gray-500 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 ForkliftPro Rental. All rights reserved. WA/Telp: 089516629776.</p>
+                <div class="flex space-x-4 text-base">
+                    <a href="https://wa.me/6285691464879" target="_blank" class="hover:text-brand-500"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" class="hover:text-brand-500"><i class="fa-solid fa-phone"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Application Logic -->
+    <script>
+        function forkliftApp() {
+            return {
+                mobileMenuOpen: false,
+                bookingModal: false,
+                selectedUnitModal: {},
+
+                selectedType: 'Semua',
+                selectedCapacity: 'Semua',
+
+                searchType: 'All',
+                searchCapacity: 'All',
+                searchLocation: 'Cikande & Serang',
+
+                typeOptions: ['Semua', 'Diesel', 'Elektrik', 'Reach Truck'],
+                capacityOptions: ['Semua', '1.5 - 2.5 Ton', '3 Ton', '5 Ton', '10 Ton', '15+ Ton'],
+
+                // Forklift Data Catalog
+                forklifts: [
+                    {
+                        id: 1,
+                        name: 'Toyota 8FD30 Heavy Solar',
+                        brand: 'Toyota Industrial Japan',
+                        capacity: '3 Ton',
+                        engine: 'Solar',
+                        mastHeight: '3 - 4.5 Meter',
+                        transmission: 'Automatic Powershift',
+                        safety: 'SAS Stability System',
+                        priceDay:0
+                    },
+                    {
+                        id: 2,
+                        name: 'Toyota 8FBN25 Clean solar',
+                        brand: 'Toyota Solar',
+                        capacity: '1.5 - 2.5 Ton',
+                        engine: 'Solar',
+                        mastHeight: '3 - 6.0 Meter',
+                        transmission: 'Automatic Eco Drive',
+                        safety: 'Zero Emission / Silent Indoor',
+                        priceDay:0
+                    },
+                    {
+                        id: 3,
+                        name: 'TCM FD50T7 Solar',
+                        brand: 'TCM Japan',
+                        capacity: '5 Ton',
+                        engine: 'Solar',
+                        mastHeight: '3 - 5.0 Meter',
+                        transmission: 'Powershift Heavy Duty',
+                        safety: 'OPS Operator Presence System',
+                        priceDay:0
+                    },
+                    {
+                        id: 4,
+                        name: 'Nichiyu High Reach Truck',
+                        brand: 'Nichiyu Solar',
+                        capacity: '1.5 - 2.5 Ton',
+                        engine: 'Solar',
+                        mastHeight: '6 - 9.0 Meter High Reach',
+                        transmission: 'Automatic Precision',
+                        safety: 'Narrow Aisle Warehouse Guard',
+                        priceDay:0
+                    },
+                    {
+                        id: 5,
+                        name: 'Komatsu FD100-8 Industrial',
+                        brand: 'Komatsu Heavy',
+                        capacity: '10 Ton',
+                        engine: 'Solar',
+                        mastHeight: '3 - 4.5 Meter',
+                        transmission: 'Automatic Heavy Duty',
+                        safety: 'Heavy Counterweight Balance',
+                        priceDay:0
+                    },
+                    {
+                        id: 6,
+                        name: 'Kalmar DCG160 Heavy Cargo',
+                        brand: 'Kalmar Big Fleet',
+                        capacity: '15+ Ton',
+                        engine: 'Solar',
+                        mastHeight: '4.5 - 6.0 Meter',
+                        transmission: 'Hydrostatic Automatic',
+                        safety: '360 Sensor & Load Cell Guard',
+                        priceDay:0
+                    }
+                ],
+
+                // Interactive Calculator State
+                calc: {
+                    selectedId: 1,
+                    type: 'Harian',
+                    duration: 1,
+                    location: 'Cikande & Serang',
+                    operator: 'with'
+                },
+
+                // Direct Contact Form State
+                form: {
+                    name: '',
+                    company: '',
+                    location: 'Cikande & Serang',
+                    capacity: '3 Ton',
+                    duration: '1 Hari',
+                    startDate: '',
+                    address: ''
+                },
+
+                // Modal Form State
+                modalForm: {
+                    name: '',
+                    location: 'Cikande & Serang',
+                    duration: '1 Hari',
+                    startDate: ''
+                },
+
+                // Computed Filter
+                get filteredForklifts() {
+                    return this.forklifts.filter(item => {
+                        const matchType = this.selectedType === 'Semua' || item.engine === this.selectedType;
+                        const matchCap = this.selectedCapacity === 'Semua' || item.capacity === this.selectedCapacity;
+                        return matchType && matchCap;
+                    });
+                },
+
+                formatRupiah(number) {
+                    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+                },
+
+                resetFilters() {
+                    this.selectedType = 'Semua';
+                    this.selectedCapacity = 'Semua';
+                },
+
+                scrollToArmadaWithFilter() {
+                    if (this.searchType !== 'All') this.selectedType = this.searchType;
+                    if (this.searchCapacity !== 'All') this.selectedCapacity = this.searchCapacity;
+                    this.calc.location = this.searchLocation;
+
+                    const target = document.getElementById('armada');
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
+                },
+
+                // Calculator Cost Methods
+                getCurrentCalcUnit() {
+                    return this.forklifts.find(u => u.id === parseInt(this.calc.selectedId)) || this.forklifts[0];
+                },
+
+                calculateBasePrice() {
+                    const unit = this.getCurrentCalcUnit();
+                    if (!unit) return 0;
+                    if (this.calc.type === 'Harian') {
+                        return unit.priceDay * (this.calc.duration || 1);
+                    } else {
+                        // Monthly multiplier rate (approx 15x day rate)
+                        return (unit.priceDay * 15) * (this.calc.duration || 1);
+                    }
+                },
+
+                calculateOperatorPrice() {
+                    if (this.calc.operator === 'without') return 0;
+                    const opRate = 250000;
+                    if (this.calc.type === 'Harian') {
+                        return opRate * (this.calc.duration || 1);
+                    } else {
+                        return (opRate * 25) * (this.calc.duration || 1);
+                    }
+                },
+
+                calculateMobilizationCost() {
+                    const loc = this.calc.location;
+                    if (loc === 'Cikande & Serang' || loc === 'Kab. Tangerang') return 500000;
+                    if (loc === 'Kota Tangerang' || loc === 'Jakarta Barat' || loc === 'Jakarta Selatan') return 800000;
+                    if (loc === 'Bekasi' || loc === 'Depok' || loc === 'Bogor') return 1200000;
+                    if (loc === 'Bandung') return 2500000;
+                    return 800000;
+                },
+
+                calculateTotalCost() {
+                    return this.calculateBasePrice() + this.calculateOperatorPrice() + this.calculateMobilizationCost();
+                },
+
+                // Send Calculator Result to WA
+                sendCalcToWa() {
+                    const unit = this.getCurrentCalcUnit();
+                    const phone = "6285691464879";
+                    const text = `*ESTIMASI KALKULATOR SEWA FORKLIFTPRO*
+----------------------------------------
+*Unit:* ${unit.name} (${unit.capacity})
+*Durasi:* ${this.calc.duration} ${this.calc.type}
+*Wilayah:* ${this.calc.location}
+*Operator:* ${this.calc.operator === 'with' ? 'Ya (Termasuk SIO)' : 'Lepas Kunci'}
+*Estimasi Total:* ${this.formatRupiah(this.calculateTotalCost())}
+----------------------------------------
+Mohon konfirmasi ketersediaan unit dan penawaran resminya. Terima kasih!`;
+
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+                },
+
+                // Direct WA Area Trigger
+                directWaArea(areaName) {
+                    const phone = "6285691464879";
+                    const text = `Halo ForkliftPro, saya ingin bertanya ketersediaan armada sewa forklift untuk wilayah pengiriman *${areaName}*. Mohon penawarannya.`;
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+                },
+
+                // Quick Modal
+                quickCalc(unit) {
+                    this.calc.selectedId = unit.id;
+                    const target = document.getElementById('kalkulator');
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
+                },
+
+                openModalWithUnit(unit) {
+                    this.selectedUnitModal = unit;
+                    this.bookingModal = true;
+                },
+
+                submitModalWa() {
+                    const phone = "6285691464879";
+                    const text = `*SEWA FORKLIFTPRO - ORDER UNIT*
+----------------------------------------
+*Unit:* ${this.selectedUnitModal.name} (${this.selectedUnitModal.capacity})
+*Nama Pemesan:* ${this.modalForm.name}
+*Wilayah:* ${this.modalForm.location}
+*Durasi:* ${this.modalForm.duration}
+*Tgl Pakai:* ${this.modalForm.startDate}
+----------------------------------------
+Mohon diproses untuk pengiriman. Terima kasih.`;
+
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+                    this.bookingModal = false;
+                },
+
+                submitDirectForm() {
+                    const phone = "6285691464879";
+                    const text = `*FORM PEMESANAN FORKLIFTPRO*
+----------------------------------------
+*Nama:* ${this.form.name}
+*Perusahaan:* ${this.form.company || '-'}
+*Wilayah:* ${this.form.location}
+*Kapasitas:* ${this.form.capacity}
+*Durasi:* ${this.form.duration}
+*Tgl Pakai:* ${this.form.startDate}
+*Alamat/Catatan:* ${this.form.address || '-'}
+----------------------------------------
+Mohon info ketersediaan unit dan jadwal pengiriman. Terima kasih!`;
+
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
